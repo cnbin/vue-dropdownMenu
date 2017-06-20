@@ -1,0 +1,4 @@
+vue-cli怎么配置scss？
+
+npm install node-sass --save-dev
+npm install sass-loader --save-dev
