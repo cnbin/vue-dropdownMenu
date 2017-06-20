@@ -97,7 +97,7 @@ export default {
           .active_sort_icon {
             @extend .sort_icon;
             transform:rotate(180deg);
-            transition: all .3s;
+            transition: all .2s;
           }
         }
       }
