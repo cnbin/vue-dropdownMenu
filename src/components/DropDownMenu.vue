@@ -1,10 +1,9 @@
 <template>
-<div>
     <section class="sort_container">
         <div class="sort_item" :class="{choose_type:sortBy == 'sort'}">
             <div class="sort_item_container" @click="chooseType('sort')">
                 <div class="sort_item_border">
-                    <span :class="{category_title: sortBy == 'sort'}">{{menuText}}</span>
+                    <span :class="{category_title: sortBy == 'sort'}">{{menuTitle}}</span>
                     <img :src="sortIconUrl" :class="[sortBy == 'sort' ? 'active_sort_icon' :'sort_icon']"> </img>
                 </div>
             </div>
@@ -22,52 +21,44 @@
             </transition>	
         </div>
     </section>
-    <section class="sort_table_list_container">
-        <ul>
-            <li>1</li>
-            <li>2</li>
-            <li>3</li>
-            <li>4</li>
-            <li>5</li>
-            <li>6</li>
-        </ul>
-    </section>
-</div>
 </template>
 
 <script>
 import config from '../config/config.js'
 import arrow from '../assets/arrow.png'
-import menu_arrow from '../assets/menu_arrow.png'
+import menuarrow from '../assets/menu_arrow.png'
 
 export default {
-    name: 'dropDownMenu',
-   	data(){
-        return {
-            sortBy: '', 
-            items: config.mItems.meun1,
-            sortIndex : '-1',
-            imgUrl:arrow,
-			sortIconUrl:menu_arrow,
-			menuText: '下拉菜单',
-        }
+  props: ['title'],
+  data () {
+    return {
+      sortBy: '',
+      items: config.mItems.meun1,
+      sortIndex: '-1',
+      imgUrl: arrow,
+      sortIconUrl: menuarrow,
+      menuTitle: this.title
+    }
+  },
+  methods: {
+    chooseType (type) {
+      if (this.sortBy !== type) {
+        this.sortBy = type
+      } else {
+        this.sortBy = '' // 再次点击相同选项时收回列表
+      }
     },
-    methods: {
-        chooseType(type){
-    		if (this.sortBy !== type) {
-    			this.sortBy = type;
-    		}else{
-    			this.sortBy = '';//再次点击相同选项时收回列表
-    		}
-    	},
-        sortList(item,index){
-            this.sortIndex = index;
-            this.sortBy = '';
-			this.menuText = item;
-			console.log(this.menuText);
-		}
+    sortList (item, index) {
+      this.sortIndex = index
+      this.sortBy = ''
+      this.menuTitle = item
+      this.listenToChildEvent(item)
+    },
+    listenToChildEvent: function (data) {
+      this.$emit('listenToChildEvent', data)
     }
   }
+}
 </script>
 
 <style lang="scss" scoped>
@@ -100,7 +91,7 @@ export default {
 					.sort_icon {
 						width: .8rem;
 						height: .8rem;
-						margin-left: .8rem;
+						margin-left: 1rem;
 						vertical-align: middle;
 					}
 					.active_sort_icon {
@@ -187,12 +178,4 @@ export default {
 			}
 		}
 	}
-    .sort_table_list_container {
-        display: flex;
-        position: absolute;
-        top: 3em;
-        bottom: 0;
-        left: 0;
-    }
-
 </style>
